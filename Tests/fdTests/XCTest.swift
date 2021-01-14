@@ -8,6 +8,6 @@ class FDTests: XCTestCase {
     testTCPConnection()
     testTCPListener()
     testUNIXConnection()
-    testUNIXListener()
+    testUNIXServerSocket()
   }
 }

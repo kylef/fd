@@ -1,2 +1,1 @@
-public protocol Connection : ReadableFileDescriptor, WritableFileDescriptor {
-}
+public protocol Connection : ReadableFileDescriptor, WritableFileDescriptor {}

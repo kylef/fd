@@ -1,3 +1,5 @@
 public protocol Listener : FileDescriptor {
-  func accept() throws -> Connection
+    associatedtype AnyConnection
+    
+    func accept() throws -> AnyConnection
 }

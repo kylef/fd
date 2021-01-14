@@ -6,20 +6,20 @@ import Darwin
 
 
 func fdZero(_ set: inout fd_set) {
-#if os(Linux)
-  set.__fds_bits = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-#else
-  set.fds_bits = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-#endif
+    #if os(Linux)
+    set.__fds_bits = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    #else
+    set.fds_bits = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    #endif
 }
 
 
 func fdSet(_ descriptor: FileNumber, _ set: inout fd_set) {
-#if os(Linux)
-  let intOffset = Int(descriptor / 16)
-  let bitOffset = Int(descriptor % 16)
-  let mask = 1 << bitOffset
-  switch intOffset {
+    #if os(Linux)
+    let intOffset = Int(descriptor / 16)
+    let bitOffset = Int(descriptor % 16)
+    let mask = 1 << bitOffset
+    switch intOffset {
     case 0: set.__fds_bits.0 = set.__fds_bits.0 | mask
     case 1: set.__fds_bits.1 = set.__fds_bits.1 | mask
     case 2: set.__fds_bits.2 = set.__fds_bits.2 | mask
@@ -37,13 +37,13 @@ func fdSet(_ descriptor: FileNumber, _ set: inout fd_set) {
     case 14: set.__fds_bits.14 = set.__fds_bits.14 | mask
     case 15: set.__fds_bits.15 = set.__fds_bits.15 | mask
     default: break
-  }
-#else
-  let intOffset = Int32(descriptor / 16)
-  let bitOffset = Int32(descriptor % 16)
-  let mask: Int32 = 1 << bitOffset
-
-  switch intOffset {
+    }
+    #else
+    let intOffset = Int32(descriptor / 16)
+    let bitOffset = Int32(descriptor % 16)
+    let mask: Int32 = 1 << bitOffset
+    
+    switch intOffset {
     case 0: set.fds_bits.0 = set.fds_bits.0 | mask
     case 1: set.fds_bits.1 = set.fds_bits.1 | mask
     case 2: set.fds_bits.2 = set.fds_bits.2 | mask
@@ -61,18 +61,18 @@ func fdSet(_ descriptor: FileNumber, _ set: inout fd_set) {
     case 14: set.fds_bits.14 = set.fds_bits.14 | mask
     case 15: set.fds_bits.15 = set.fds_bits.15 | mask
     default: break
-  }
-#endif
+    }
+    #endif
 }
 
 
 func fdIsSet(_ descriptor: FileNumber, _ set: inout fd_set) -> Bool {
-#if os(Linux)
-  let intOffset = Int(descriptor / 32)
-  let bitOffset = Int(descriptor % 32)
-  let mask = Int(1 << bitOffset)
-
-  switch intOffset {
+    #if os(Linux)
+    let intOffset = Int(descriptor / 32)
+    let bitOffset = Int(descriptor % 32)
+    let mask = Int(1 << bitOffset)
+    
+    switch intOffset {
     case 0: return set.__fds_bits.0 & mask != 0
     case 1: return set.__fds_bits.1 & mask != 0
     case 2: return set.__fds_bits.2 & mask != 0
@@ -90,13 +90,13 @@ func fdIsSet(_ descriptor: FileNumber, _ set: inout fd_set) -> Bool {
     case 14: return set.__fds_bits.14 & mask != 0
     case 15: return set.__fds_bits.15 & mask != 0
     default: return false
-  }
-#else
-  let intOffset = Int32(descriptor / 32)
-  let bitOffset = Int32(descriptor % 32)
-  let mask = Int32(1 << bitOffset)
-
-  switch intOffset {
+    }
+    #else
+    let intOffset = Int32(descriptor / 32)
+    let bitOffset = Int32(descriptor % 32)
+    let mask = Int32(1 << bitOffset)
+    
+    switch intOffset {
     case 0: return set.fds_bits.0 & mask != 0
     case 1: return set.fds_bits.1 & mask != 0
     case 2: return set.fds_bits.2 & mask != 0
@@ -130,6 +130,6 @@ func fdIsSet(_ descriptor: FileNumber, _ set: inout fd_set) -> Bool {
     case 30: return set.fds_bits.30 & mask != 0
     case 31: return set.fds_bits.31 & mask != 0
     default: return false
-  }
-#endif
+    }
+    #endif
 }

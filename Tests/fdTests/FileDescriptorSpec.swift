@@ -45,7 +45,7 @@ public func testFileDescriptor() {
       let (read, write) = try pipe()
       try expect(try write.write([1, 2, 3])) == 3
 
-      let bytes = try read.read(3)
+      let bytes: [Byte] = try read.read(3)
       try expect(bytes.count) == 3
       try expect(bytes[0]) == 1
       try expect(bytes[1]) == 2
@@ -59,7 +59,7 @@ public func testFileDescriptor() {
 
     $0.it("errors while reading from an invalid file descriptor") {
       let descriptor = TestFileDescriptor(fileNumber: -1)
-      try expect { try descriptor.read(1) }.toThrow()
+      try expect { try descriptor.read(1) as [Byte] }.toThrow()
     }
   }
 }
